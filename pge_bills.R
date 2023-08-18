@@ -6,11 +6,17 @@ library(scales)
 library(emojifont)
 library(plotly)
 
-setwd('../../../personal/bills')
+setwd('personal/bills')
+
+# # get my personal info outa there!
+# read_csv(
+#   'data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv',
+#   skip = 4
+# ) %>%
+#   write_csv('data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv')
 
 gas_usage <- read_csv(
-  'pge_data/pge_gas_billing_data_0091651353_2020-08-28_to_2023-07-28.csv',
-  skip = 4
+  'data/pge/pge_gas_billing_data_0091651353_2020-08-28_to_2023-07-28.csv'
   ) %>%
   rename(
     'start_date' = 'START DATE',
