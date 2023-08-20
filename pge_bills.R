@@ -65,7 +65,7 @@ g <- ggplot(gas_usage, aes(x = nite_temp_F, y = therms, color = factor(year))) +
 
 ggplotly(g)
 
-ggplot(
+g <- ggplot(
   gas_usage,
   aes(
     y = year,
@@ -74,15 +74,6 @@ ggplot(
     label = emoji('fire')
   )
 ) +
-  geom_tile(
-    height = 1,
-    width = 1,
-    size = 1,
-    color = "#CCCCCC",
-    fill = 'white',
-    alpha = 0.1,
-    linewidth = 0.2
-  ) +
   geom_text(
     aes(
       x = month + .15,
@@ -182,7 +173,8 @@ ggplot(
   scale_color_gradient2(low = "#57CBF0",
                        mid = "#dde23b",
                        high = "#cc6622",
-                       midpoint = 55) +
+                       midpoint = 55
+                       ) +
   scale_x_continuous(
     name = '',
     position = 'top',
@@ -215,13 +207,76 @@ ggplot(
       )
   )
 
+g <- g + geom_tile(
+  data = gas_usage,
+  aes(
+    y = year,
+    x = month
+  ),
+  height = 1,
+  width = 1,
+  size = 1,
+  color = "#CCCCCC",
+  fill = 'white',
+  alpha = 0.1,
+  linewidth = 0.2
+)
+
 ggplotly(g)
 
-df2 <- data.frame(df2, y = 1:9)
-ggplot(df2, aes(x = 1, y = y, xend = 2, yend = y, label = paste(lineend, linejoin))) +
-  geom_segment(
-    lineend = df2$lineend, linejoin = df2$linejoin,
-    size = 3, arrow = arrow(length = unit(0.3, "inches"))
-  ) +
-  geom_text(hjust = 'outside', nudge_x = -0.2) +
-  xlim(0.5, 2)
+library(data.table)
+
+x = rep(c("1", "2", "3"), 3)
+y = rep(c("K", "B","A"), each=3)
+z = sample(c(NA,"A","L"), 9,replace = TRUE)
+
+df <- data.table(x,y,z)
+
+p <- ggplot(df)+
+  geom_tile(
+    aes(x=x,y=y),
+    width=0.9,
+    height=0.9,
+    fill="grey"
+    ) 
+
+
+p <- p +
+  geom_tile(
+    data = filter(df,z=="A"),
+    aes(x=x,y=y,fill=z),
+    width=0.9,
+    height=0.9
+    )
+
+p
+
+ggplotly(p)
+
+p <- ggplot(df) +
+  geom_tile(
+    aes(x=x,y=y,fill="G"),
+    width=0.9,
+    height=0.9
+    ) 
+
+p <- p +
+  geom_tile(
+    data = filter(df, z=="A"),
+    aes(x=x,y=y,fill=z),
+    width=0.9,
+    height=0.9
+    )
+
+p <- p +
+  scale_fill_manual(
+    guide = guide_legend(title = "test",
+                       override.aes = list(
+                         fill =c("red","white")                  )
+  ),
+  values = c("red","grey"),
+  labels=c("A",""))
+
+p
+
+ggplotly(p)
