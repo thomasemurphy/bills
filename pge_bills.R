@@ -6,7 +6,7 @@ library(scales)
 library(emojifont)
 library(plotly)
 
-setwd('personal/bills')
+setwd('bills')
 
 # # get my personal info outa there!
 # read_csv(
@@ -16,12 +16,13 @@ setwd('personal/bills')
 #   write_csv('data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv')
 
 gas_usage <- read_csv(
-  'data/pge/pge_gas_billing_data_0091651353_2020-08-28_to_2023-07-28.csv'
+  '../pge_2024-09-06/pge_natural_gas_billing_billing_data_Service 2_2_2021-08-31_to_2024-08-27.csv',
+  skip = 5
   ) %>%
   rename(
     'start_date' = 'START DATE',
     'end_date' = 'END DATE',
-    'therms' = 'USAGE',
+    'therms' = 'USAGE (therms)',
     'cost' = 'COST'
   ) %>%
   mutate(
@@ -32,36 +33,97 @@ gas_usage <- read_csv(
     n_days = as.integer(difftime(end_date, start_date, units='days')),
     ) %>%
   select(year, month, date_center, start_date, end_date, n_days, therms, cost) %>%
-  print()
+  print(n = 100)
 
-weather_files <- paste0('data/weather/', list.files(path = 'data/weather'))
+# weather_files <- paste0('data/weather/', list.files(path = 'data/weather'))
 
-all_weather <- read_csv(weather_files, id = "file_name") %>%
-  rename(
-    'date' = '...1',
-    'midnite_temp' = '0'
-    ) %>%
-  mutate(date = as_date(date)) %>%
-  mutate(
-    year = year(date),
-    month = month(date),
-    day = day(date)
+# all_weather <- read_csv(weather_files, id = "file_name") %>%
+#   rename(
+#     'date' = '...1',
+#     'midnite_temp' = '0'
+#     ) %>%
+#   mutate(date = as_date(date)) %>%
+#   mutate(
+#     year = year(date),
+#     month = month(date),
+#     day = day(date)
+#   )
+
+# temp_by_month <- all_weather %>%
+#   group_by(year, month) %>%
+#   summarize(mean_midnite_temp = mean(midnite_temp)) %>%
+#   mutate(nite_temp_F = (mean_midnite_temp - 273) * 9/5 + 32) %>%
+#   arrange(year, month)
+
+# gas_usage <- gas_usage %>%
+#   left_join(temp_by_month, by = c('year', 'month'))
+
+g <- ggplot(gas_usage, aes(x = date_center, y = therms, color = factor(year))) +
+  geom_point() +
+  geom_line()
+
+ggplot(
+  gas_usage,
+  aes(
+    x = month,
+    y = year,
+    size = therms,
+    label = emoji('fire')
   )
-
-temp_by_month <- all_weather %>%
-  group_by(year, month) %>%
-  summarize(mean_midnite_temp = mean(midnite_temp)) %>%
-  mutate(nite_temp_F = (mean_midnite_temp - 273) * 9/5 + 32) %>%
-  arrange(year, month)
-
-temp_by_month
-gas_usage
-
-gas_usage <- gas_usage %>%
-  left_join(temp_by_month, by = c('year', 'month'))
-
-g <- ggplot(gas_usage, aes(x = nite_temp_F, y = therms, color = factor(year))) +
-  geom_point()
+) +
+  geom_text(
+    aes(
+      x = month + .15,
+      y = year + .3
+    ),
+    family = "EmojiOne",
+    vjust = 0,
+    hjust = 0.5,
+    color = '#B2401D'
+  ) +
+  geom_text(
+    aes(label = therms,
+        x = month + .15,
+        y = year + 0.44
+    ),
+    alpha = 0.7,
+    color = '#B2401D',
+    vjust = 0,
+    hjust = 0.5,
+    size = 3.2
+  ) +
+  scale_x_continuous(
+    name = '',
+    position = 'top',
+    breaks = seq(1,12),
+    limits = c(0.5, 12.5),
+    labels = month(
+      seq(1,12),
+      label = TRUE
+    )
+  ) +
+  scale_size(range = c(1, 12)) +
+  scale_y_reverse(
+    name = '',
+    limits = c(2024.8, 2019.5),
+    breaks = seq(2024, 2019, -1),
+    labels = as.character(seq(2024, 2019, -1))
+  ) +
+  theme_bw() +
+  theme(
+    panel.grid = element_blank(),
+    # panel.grid.minor.y = element_line(),
+    axis.ticks = element_blank(),
+    panel.border = element_blank(),
+    legend.position = 'none',
+    axis.text = element_text(size = 12),
+    # plot.margin = unit(c(0,0,0,0), 'lines'),
+    axis.text.y = element_text(
+      margin = margin(l = -.5),
+      hjust = .5
+    )
+  )
+  
 
 ggplotly(g)
 
