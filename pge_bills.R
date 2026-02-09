@@ -6,7 +6,7 @@ library(scales)
 library(emojifont)
 library(plotly)
 
-setwd('bills')
+setwd('../../bills')
 
 # # get my personal info outa there!
 # read_csv(

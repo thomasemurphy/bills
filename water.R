@@ -9,7 +9,7 @@ library(plotly)
 setwd('bills')
 
 water_usage <- read_csv(
-  '../water usage.csv'
+  'water usage.csv'
   ) %>%
   rename(
     'statement_date' = 'Statement Date',
@@ -33,7 +33,7 @@ ggplot(water_usage, aes(x = mid_date, y = gpd)) +
 
 ggplot(
   water_usage
-  %>% filter(gpd > 40),
+  %>% filter(gpd > 0),
   aes(
     x = month,
     y = year,
