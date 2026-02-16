@@ -1,0 +1,43 @@
+﻿
+Name,LAUREN MELENEY
+Address,"3879 WHITTLE AVE, OAKLAND CA 946022466"
+Account Number,0093607678
+Service,Service 2
+
+TYPE,START DATE,END DATE,USAGE (kWh),COST,NOTES
+Electric billing,2023-01-27,2023-02-27,297.43,$98.22
+Electric billing,2023-02-28,2023-03-28,253.35,$48.13
+Electric billing,2023-03-29,2023-04-27,275.69,$95.40
+Electric billing,2023-04-28,2023-05-29,271.51,$92.16
+Electric billing,2023-05-30,2023-06-27,231.48,$92.30
+Electric billing,2023-06-28,2023-07-27,227.37,$95.15
+Electric billing,2023-07-28,2023-08-27,136.24,$57.67
+Electric billing,2023-08-28,2023-09-26,121.85,$29.79
+Electric billing,2023-09-27,2023-10-26,177.58,$24.17
+Electric billing,2023-10-27,2023-11-28,285.51,$102.09
+Electric billing,2023-11-29,2023-12-27,242.51,$78.38
+Electric billing,2023-12-28,2024-01-28,258.56,$106.20
+Electric billing,2024-01-29,2024-02-27,209.61,$85.98
+Electric billing,2024-02-28,2024-03-27,201.61,$82.62
+Electric billing,2024-03-28,2024-04-28,200.20,$27.92
+Electric billing,2024-04-29,2024-05-28,173.57,$72.41
+Electric billing,2024-05-29,2024-06-26,133.05,$63.01
+Electric billing,2024-06-27,2024-07-25,78.31,$36.15
+Electric billing,2024-07-26,2024-08-26,95.82,$42.07
+Electric billing,2024-08-27,2024-09-25,147.89,$65.44
+Electric billing,2024-09-26,2024-10-24,174.58,$24.01
+Electric billing,2024-10-25,2024-11-24,398.39,$173.53
+Electric billing,2024-11-25,2024-12-25,370.19,$159.24
+Electric billing,2024-12-26,2025-01-26,746.51,$334.35
+Electric billing,2025-01-27,2025-02-25,635.30,$291.58
+Electric billing,2025-02-26,2025-03-26,443.77,$199.78
+Electric billing,2025-03-27,2025-04-24,434.23,$136.62
+Electric billing,2025-04-25,2025-05-26,384.37,$166.96
+Electric billing,2025-05-27,2025-06-25,333.05,$158.49
+Electric billing,2025-06-26,2025-07-27,193.00,$86.17
+Electric billing,2025-07-28,2025-08-25,135.29,$60.93
+Electric billing,2025-08-26,2025-09-24,100.89,$44.41
+Electric billing,2025-09-25,2025-10-26,234.61,$34.74
+Electric billing,2025-10-27,2025-11-24,293.12,$120.76
+Electric billing,2025-11-25,2025-12-26,538.81,$239.30
+Electric billing,2025-12-27,2026-01-27,687.22,$339.95

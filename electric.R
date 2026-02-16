@@ -1,47 +1,60 @@
 library(tidyverse)
-library(ggplot2)
-library(lubridate)
-library(scales)
-# library(ggtext)
 library(emojifont)
-library(plotly)
 
 setwd('bills')
 
-# # get my personal info outa there!
-# read_csv(
-#   'data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv',
-#   skip = 4
-# ) %>%
-#   write_csv('data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv')
-
-electric_usage <- read_csv(
-  '../pge_2024-09-06/pge_electric_billing_billing_data_Service 1_1_2021-08-30_to_2024-08-26.csv',
-  skip = 5
+electric_usage_1 <- read_csv(
+  'data/pge/pge_electric_billing_data_0098839276_2020-08-27_to_2023-07-27.csv',
   ) %>%
+  select(-c(UNITS, TYPE, NOTES)) %>%
+  rename(
+    'start_date' = 'START DATE',
+    'end_date' = 'END DATE',
+    'kwh' = 'USAGE',
+    'cost' = 'COST'
+  ) %>%
+  print(n = 100)
+
+electric_usage_2 <- read_csv(
+  'data/pge/pge_2026-02-08/pge_electric_billing_billing_data_Service 2_2_2023-01-27_to_2026-01-27.csv',
+  skip = 5
+) %>%
+  select(-c(TYPE, NOTES)) %>%
   rename(
     'start_date' = 'START DATE',
     'end_date' = 'END DATE',
     'kwh' = 'USAGE (kWh)',
     'cost' = 'COST'
   ) %>%
+  print()
+
+electric_total <- rbind(
+  electric_usage_1,
+  electric_usage_2
+) %>%
   mutate(
-    cost = as.numeric(gsub('\\$', '', cost)),
+    cost = as.numeric(substr(cost, 2, 6)),
     date_center = end_date - days(12),
     year = year(date_center),
     month = month(date_center),
     n_days = as.integer(difftime(end_date, start_date, units='days')),
-    ) %>%
+  ) %>%
   select(year, month, date_center, start_date, end_date, n_days, kwh, cost) %>%
   print(n = 100)
 
-ggplot(electric_usage, aes(x = date_center, y = kwh, color = factor(year))) +
+electric_total <- electric_total %>%
+  group_by(start_date) %>%
+  slice_head(n = 1) %>%
+  ungroup() %>%
+  arrange(start_date) %>%
+  print(n = 100)
+
+ggplot(electric_total, aes(x = date_center, y = kwh, color = factor(year))) +
   geom_point() +
   geom_line()
 
 ggplot(
-  electric_usage
-  %>% filter(kwh > 130),
+  electric_total,
   aes(
     x = month,
     y = year,
@@ -87,9 +100,9 @@ ggplot(
   scale_size(range = c(3, 7)) +
   scale_y_reverse(
     name = '',
-    limits = c(2024.8, 2019.5),
-    breaks = seq(2024, 2019, -1),
-    labels = as.character(seq(2024, 2019, -1))
+    limits = c(2026.5, 2019.5),
+    breaks = seq(2026, 2019, -1),
+    labels = as.character(seq(2026, 2019, -1))
   ) +
   theme_bw() +
   theme(
@@ -105,4 +118,10 @@ ggplot(
       hjust = .5
     )
   )
-  
+
+electric_total <- electric_total %>%
+  mutate(dollars_per_kwh = cost / kwh)
+
+ggplot(electric_total, aes(x = start_date, y = dollars_per_kwh)) +
+  geom_point() +
+  geom_line()
