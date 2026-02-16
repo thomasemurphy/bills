@@ -1,35 +1,44 @@
 library(tidyverse)
-library(ggplot2)
-library(lubridate)
-library(scales)
-# library(ggtext)
 library(emojifont)
-library(plotly)
 
 setwd('bills')
 
+# water_usage_1 <- read_csv(
+#   'data/ebmud/ebmud_pull_sep_24.csv'
+#   ) %>%
+#   rename(
+#     'statement_date' = 'Statement Date',
+#     'read_date' = 'Reading Date',
+#     'ccf' = 'Consumption (CCF)',
+#     'days' = 'Days',
+#     'gpd' = 'Gallons Per Day'
+#   ) %>%
+#   mutate(
+#     statement_date = as_date(statement_date, format = '%m/%d/%Y'),
+#     read_date = as_date(read_date, format = '%m/%d/%Y'),
+#     mid_date = read_date - days(30),
+#     year = year(mid_date),
+#     month = month(mid_date)
+#     ) %>%
+#   print(n = 100)
+
 water_usage <- read_csv(
-  'water usage.csv'
-  ) %>%
+  'data/ebmud/ebmud_pull_feb_26.csv'
+) %>%
   rename(
-    'statement_date' = 'Statement Date',
     'read_date' = 'Reading Date',
-    'ccf' = 'Consumption (CCF)',
-    'days' = 'Days',
-    'gpd' = 'Gallons Per Day'
+    'ccf' = 'CCF',
+    'days' = 'Days in Read Period',
+    'gpd' = 'Customer GPD'
   ) %>%
   mutate(
-    statement_date = as_date(statement_date, format = '%m/%d/%Y'),
     read_date = as_date(read_date, format = '%m/%d/%Y'),
     mid_date = read_date - days(30),
     year = year(mid_date),
-    month = month(mid_date)
-    ) %>%
+    month = month(mid_date),
+    gpd = as.numeric(gpd)
+  ) %>%
   print(n = 100)
-
-ggplot(water_usage, aes(x = mid_date, y = gpd)) +
-  geom_point() +
-  geom_line()
 
 ggplot(
   water_usage
@@ -87,9 +96,9 @@ ggplot(
   scale_size(range = c(4, 8)) +
   scale_y_reverse(
     name = '',
-    limits = c(2024.8, 2019.5),
-    breaks = seq(2024, 2019, -1),
-    labels = as.character(seq(2024, 2019, -1))
+    limits = c(2026.8, 2018.5),
+    breaks = seq(2026, 2019, -1),
+    labels = as.character(seq(2026, 2019, -1))
   ) +
   theme_bw() +
   theme(
